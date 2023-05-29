@@ -14,6 +14,7 @@
          function DisplayFunction() {
             var includeOSD = document.getElementById("include-osd").checked;
             var includeModes = document.getElementById("include-modes").checked;
+            var includeBlackbox = document.getElementById("include-blackbox").checked;
             // var elrsUART = document.getElementById("elrs-rx-uart").value - 1;
             // var hdzeroUART = document.getElementById("hdzero-vtx-uart").value - 1;
 
@@ -303,12 +304,13 @@
             // # set vtx_freq = 5917
 
 
-            result += "\n# --";
-            result += "\n# -- Blackbox Tab Settings";
-            result += "\n# --";
-            result += "\nset blackbox_sample_rate = 1/2";
-            result += "\nset debug_mode = GYRO_SCALED";
-
+            if(includeBlackbox) {
+                result += "\n# --";
+                result += "\n# -- Blackbox Tab Settings";
+                result += "\n# --";
+                result += "\nset blackbox_sample_rate = 1/2";
+                result += "\nset debug_mode = GYRO_SCALED";
+            }
             
             
             
@@ -411,8 +413,13 @@
         <label>Include Modes (this will overwrite your modes if you apply the CLI commands)</label></p>
         <p>
 
+        <p>
+        <input id="include-blackbox" class="w3-check" type="checkbox" checked="checked">
+        <label>Include Blackbox logging (check this if your flight controller is capable of capturing blackbox logs)</label></p>
+        <p>
+
         <!-- <p>
-            <button class="w3-btn w3-blue-grey" onclick="DisplayFunction()">Generate CLI Commands</button>
+        <button class="w3-btn w3-blue-grey" onclick="DisplayFunction()">Generate CLI Commands</button>
         </p> -->
         <div class="w3-container">
         <input type = "button" class="w3-button w3-blue-grey" value="Generate CLI Commands" onclick = "DisplayFunction()">
