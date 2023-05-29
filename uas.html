@@ -12,6 +12,11 @@
             return val;
          }
          function DisplayFunction() {
+            var includeOSD = document.getElementById("include-osd").checked;
+            var includeModes = document.getElementById("include-modes").checked;
+            // var elrsUART = document.getElementById("elrs-rx-uart").value - 1;
+            // var hdzeroUART = document.getElementById("hdzero-vtx-uart").value - 1;
+
             var craftName = document.getElementById("craft-name").value;
             var pilotName = document.getElementById("pilot-name").value;
             var vtxBand = document.getElementById("vtx-band").value;
@@ -22,8 +27,6 @@
             var escPWMFrequency = document.getElementById("esc-pwm-frequency").value;
             var propSizeInInches = document.getElementById("prop-size-inches").value;
             var throttleScalePercent = document.getElementById("throttle-scale-percent").value;
-            // var elrsUART = document.getElementById("elrs-rx-uart").value - 1;
-            // var hdzeroUART = document.getElementById("hdzero-vtx-uart").value - 1;
 
             var result = "";
             result = "<pre>";
@@ -183,15 +186,17 @@
             result += "\nset report_cell_voltage = ON";
 
 
-            result += "\n# --";
-            result += "\n# -- Modes Tab Settings";
-            result += "\n# --";
-            result += "\naux 0 0 0 1500 2100 0 0";
-            result += "\naux 1 1 3 1500 2100 0 0";
-            result += "\naux 2 26 5 1300 1700 0 0";
-            result += "\naux 3 28 2 1500 2100 0 0";
-            result += "\naux 4 31 5 1700 2100 0 0";
-            result += "\naux 5 35 1 1500 2100 0 0";
+            if(includeModes) {
+                result += "\n# --";
+                result += "\n# -- Modes Tab Settings";
+                result += "\n# --";
+                result += "\naux 0 0 0 1500 2100 0 0";
+                result += "\naux 1 1 3 1500 2100 0 0";
+                result += "\naux 2 26 5 1300 1700 0 0";
+                result += "\naux 3 28 2 1500 2100 0 0";
+                result += "\naux 4 31 5 1700 2100 0 0";
+                result += "\naux 5 35 1 1500 2100 0 0";
+            }
 
 
             result += "\n# --";
@@ -212,51 +217,53 @@
             // # set dyn_notch_q = 500
 
 
-            result += "\n# --";
-            result += "\n# -- OSD Tab Settings";
-            result += "\n# --";
-            result += "\nset vcd_video_system = HD";
-            result += "\nset osd_units = IMPERIAL";
-            result += "\nset osd_warn_bitmask = 50175";
-            result += "\nset osd_rssi_dbm_alarm = -95";
-            if(batteryCapacity > 0) {
-                result = result + concatenate("\nset osd_cap_alarm = ", (batteryCapacity * 0.70));
+            if(includeOSD) {
+                result += "\n# --";
+                result += "\n# -- OSD Tab Settings";
+                result += "\n# --";
+                result += "\nset vcd_video_system = HD";
+                result += "\nset osd_units = IMPERIAL";
+                result += "\nset osd_warn_bitmask = 50175";
+                result += "\nset osd_rssi_dbm_alarm = -95";
+                if(batteryCapacity > 0) {
+                    result = result + concatenate("\nset osd_cap_alarm = ", (batteryCapacity * 0.70));
+                }
+                result += "\nset osd_tim1 = 2561";
+                result += "\nset osd_tim2 = 2560";
+                result += "\nset osd_vbat_pos = 395";
+                result += "\nset osd_rssi_pos = 194";
+                result += "\nset osd_link_quality_pos = 13580";
+                result += "\nset osd_rssi_dbm_pos = 13613";
+                result += "\nset osd_rsnr_pos = 448";
+                result += "\nset osd_tim_1_pos = 14358";
+                result += "\nset osd_tim_2_pos = 87";
+                result += "\nset osd_remaining_time_estimate_pos = 33";
+                result += "\nset osd_flymode_pos = 12800";
+                result += "\nset osd_throttle_pos = 240";
+                result += "\nset osd_vtx_channel_pos = 30727";
+                result += "\nset osd_current_pos = 15365";
+                result += "\nset osd_mah_drawn_pos = 14366";
+                result += "\nset osd_craft_name_pos = 14880";
+                result += "\nset osd_pilot_name_pos = 15915";
+                result += "\nset osd_home_dist_pos = 98";
+                result += "\nset osd_flight_dist_pos = 130";
+                result += "\nset osd_power_pos = 1551";
+                result += "\nset osd_warnings_pos = 14579";
+                result += "\nset osd_avg_cell_voltage_pos = 14349";
+                result += "\nset osd_battery_usage_pos = 33002";
+                result += "\nset osd_disarmed_pos = 14645";
+                result += "\nset osd_ready_mode_pos = 14678";
+                result += "\nset osd_esc_tmp_pos = 163";
+                result += "\nset osd_esc_rpm_pos = 150";
+                result += "\nset osd_rtc_date_time_pos = 426";
+                result += "\nset osd_flip_arrow_pos = 14616";
+                result += "\nset osd_core_temp_pos = 12544";
+                result += "\nset osd_sys_vtx_temp_pos = 12576";
+                result += "\nset osd_stat_bitmask = 28554979";
+                result += "\nset osd_displayport_device = MSP";
+                result += "\nset osd_canvas_width = 50";
+                result += "\nset osd_canvas_height = 18";
             }
-            result += "\nset osd_tim1 = 2561";
-            result += "\nset osd_tim2 = 2560";
-            result += "\nset osd_vbat_pos = 395";
-            result += "\nset osd_rssi_pos = 194";
-            result += "\nset osd_link_quality_pos = 13580";
-            result += "\nset osd_rssi_dbm_pos = 13613";
-            result += "\nset osd_rsnr_pos = 448";
-            result += "\nset osd_tim_1_pos = 14358";
-            result += "\nset osd_tim_2_pos = 87";
-            result += "\nset osd_remaining_time_estimate_pos = 33";
-            result += "\nset osd_flymode_pos = 12800";
-            result += "\nset osd_throttle_pos = 240";
-            result += "\nset osd_vtx_channel_pos = 30727";
-            result += "\nset osd_current_pos = 15365";
-            result += "\nset osd_mah_drawn_pos = 14366";
-            result += "\nset osd_craft_name_pos = 14880";
-            result += "\nset osd_pilot_name_pos = 15915";
-            result += "\nset osd_home_dist_pos = 98";
-            result += "\nset osd_flight_dist_pos = 130";
-            result += "\nset osd_power_pos = 1551";
-            result += "\nset osd_warnings_pos = 14579";
-            result += "\nset osd_avg_cell_voltage_pos = 14349";
-            result += "\nset osd_battery_usage_pos = 33002";
-            result += "\nset osd_disarmed_pos = 14645";
-            result += "\nset osd_ready_mode_pos = 14678";
-            result += "\nset osd_esc_tmp_pos = 163";
-            result += "\nset osd_esc_rpm_pos = 150";
-            result += "\nset osd_rtc_date_time_pos = 426";
-            result += "\nset osd_flip_arrow_pos = 14616";
-            result += "\nset osd_core_temp_pos = 12544";
-            result += "\nset osd_sys_vtx_temp_pos = 12576";
-            result += "\nset osd_stat_bitmask = 28554979";
-            result += "\nset osd_displayport_device = MSP";
-            result += "\nset osd_canvas_width = 50";
-            result += "\nset osd_canvas_height = 18";
 
 
             result += "\n# --";
@@ -393,6 +400,16 @@
         <label for="throttle-scale-percent">Throttle scale percent (100 = OFF):</label>
         <input class="w3-input w3-border w3-round" type="text" id="throttle-scale-percent" name="throttle-scale-percent" value="100">
         </p>
+
+        <p>
+        <input id="include-osd" class="w3-check" type="checkbox" checked="checked">
+        <label>Include OSD layout (this will overwrite your OSD if you apply the CLI commands)</label></p>
+        <p>
+
+        <p>
+        <input id="include-modes" class="w3-check" type="checkbox" checked="checked">
+        <label>Include Modes (this will overwrite your modes if you apply the CLI commands)</label></p>
+        <p>
 
         <!-- <p>
             <button class="w3-btn w3-blue-grey" onclick="DisplayFunction()">Generate CLI Commands</button>
